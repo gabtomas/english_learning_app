@@ -26,8 +26,205 @@ import {
 import { api } from './api';
 import type { VocabularyWord, QuizQuestion, Stats } from './api';
 
-type Tab = 'vocabulary' | 'study' | 'stats';
+type Tab = 'vocabulary' | 'study' | 'stats' | 'grammar';
 type StudyMode = 'flashcard' | 'quiz' | 'typing' | 'characters';
+
+interface GrammarTopic {
+  id: string;
+  title: string;
+  czechTitle: string;
+  description: string;
+  rules: {
+    title: string;
+    explanation: string;
+    examples: { en: string; cs: string }[];
+  }[];
+  quiz: {
+    question: string;
+    options: string[];
+    correctAnswer: string;
+    explanation: string;
+  }[];
+}
+
+const grammarTopics: GrammarTopic[] = [
+  {
+    id: 'perfect_past',
+    title: 'Present Perfect vs Past Simple',
+    czechTitle: 'Předpřítomný vs Minulý prostý čas',
+    description: 'Master the difference between finished past actions (Past Simple) and past experiences with a link to the present (Present Perfect).',
+    rules: [
+      {
+        title: 'Present Perfect (Předpřítomný čas)',
+        explanation: 'Used for actions that happened at an unspecified time, life experiences, or when the time period is still continuing (today, this week). Formed with have/has + 3rd form (past participle).',
+        examples: [
+          { en: 'I have written three functions today.', cs: 'Dnes jsem napsal tři funkce (a den ještě neskončil).' },
+          { en: 'We have updated the dependency twice this month.', cs: 'Tento měsíc jsme závislost aktualizovali dvakrát.' },
+        ],
+      },
+      {
+        title: 'Past Simple (Minulý prostý čas)',
+        explanation: 'Used for completed actions in the past with a specific time indicator (yesterday, last week, in 2023). Formed with the -ed ending or irregular verb forms.',
+        examples: [
+          { en: 'I wrote a new script yesterday.', cs: 'Včera jsem napsal nový skript.' },
+          { en: 'They launched the server last night.', cs: 'Včera v noci spustili ten server.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'I _______ that security bug last night.',
+        options: ['fixed', 'have fixed', 'fix', 'was fixing'],
+        correctAnswer: 'fixed',
+        explanation: '"Last night" is a specific completed time in the past, which requires the Past Simple.',
+      },
+      {
+        question: 'We _______ this SQL database since 2024.',
+        options: ['have used', 'used', 'are using', 'use'],
+        correctAnswer: 'have used',
+        explanation: '"Since" indicates an action that started in the past and continues into the present, which requires the Present Perfect.',
+      },
+      {
+        question: 'She _______ to the director yesterday.',
+        options: ['spoke', 'has spoken', 'speaks', 'had spoken'],
+        correctAnswer: 'spoke',
+        explanation: '"Yesterday" is a finished past time frame, demanding the Past Simple.',
+      },
+    ],
+  },
+  {
+    id: 'conditionals',
+    title: 'Conditionals (1st & 2nd)',
+    czechTitle: 'Podmínkové věty',
+    description: 'Learn to write real future possibilities (1st Conditional) and hypothetical or imaginary situations (2nd Conditional).',
+    rules: [
+      {
+        title: 'First Conditional (Reálná podmínka)',
+        explanation: 'Used for real or highly probable future events. Structure: If + Present Simple, will + verb.',
+        examples: [
+          { en: 'If the server crashes, the backup will kick in.', cs: 'Pokud server spadne, záloha se spustí.' },
+          { en: 'If you push the code now, it will deploy in minutes.', cs: 'Pokud ten kód pushneš teď, nasadí se za pár minut.' },
+        ],
+      },
+      {
+        title: 'Second Conditional (Nereálná podmínka)',
+        explanation: 'Used for imaginary, hypothetical, or highly improbable situations in the present or future. Structure: If + Past Simple, would + verb.',
+        examples: [
+          { en: 'If I had more RAM, I would run five containers.', cs: 'Kdybych měl více RAM, spustil bych pět kontejnerů.' },
+          { en: 'If they paid more, he would stay in the company.', cs: 'Kdyby platili víc, zůstal by ve firmě.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'If they _______ the application, the site will go down.',
+        options: ['restart', 'will restart', 'restarted', 'would restart'],
+        correctAnswer: 'restart',
+        explanation: 'This is a First Conditional sentence. The "if" clause takes the Present Simple (restart), and the main clause takes "will".',
+      },
+      {
+        question: 'If I _______ a million dollars, I would buy a server farm.',
+        options: ['had', 'have', 'would have', 'had had'],
+        correctAnswer: 'had',
+        explanation: 'This is a Second Conditional (hypothetical). The "if" clause takes the Past Simple (had), and the main clause takes "would".',
+      },
+      {
+        question: 'If you click that button, the script _______ the logs.',
+        options: ['will delete', 'would delete', 'deletes', 'deleted'],
+        correctAnswer: 'will delete',
+        explanation: 'This is a First Conditional (real possibility). The main clause requires "will + verb".',
+      },
+    ],
+  },
+  {
+    id: 'gerund_infinitive',
+    title: 'Gerunds vs Infinitives',
+    czechTitle: 'Gerundium vs Infinitiv',
+    description: 'Understand which English verbs are followed by "-ing" (gerund) and which require "to + verb" (infinitive).',
+    rules: [
+      {
+        title: 'Verbs with Gerund (-ing)',
+        explanation: 'Common verbs followed by the -ing form: avoid, enjoy, keep, suggest, finish, look forward to.',
+        examples: [
+          { en: 'Please avoid committing passwords directly.', cs: 'Vyhněte se prosím přímému nahrávání hesel.' },
+          { en: 'I look forward to collaborating on this repo.', cs: 'Těším se na spolupráci na tomto repozitáři.' },
+        ],
+      },
+      {
+        title: 'Verbs with Infinitive (to + verb)',
+        explanation: 'Common verbs followed by the infinitive form: decide, hope, manage, plan, fail, want, agree.',
+        examples: [
+          { en: 'We decided to upgrade the framework.', cs: 'Rozhodli jsme se aktualizovat framework.' },
+          { en: 'He managed to restore the system.', cs: 'Podařilo se mu obnovit systém.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'The developer decided _______ the library.',
+        options: ['to upgrade', 'upgrading', 'upgrade', 'upgraded'],
+        correctAnswer: 'to upgrade',
+        explanation: 'The verb "decide" is always followed by the infinitive with "to" (to upgrade).',
+      },
+      {
+        question: 'You must avoid _______ secret keys in your files.',
+        options: ['storing', 'to store', 'store', 'stored'],
+        correctAnswer: 'storing',
+        explanation: 'The verb "avoid" is always followed by the gerund (-ing form, storing).',
+      },
+      {
+        question: 'We look forward to _______ the project next week.',
+        options: ['launching', 'to launch', 'launch', 'launched'],
+        correctAnswer: 'launching',
+        explanation: 'The phrase "look forward to" requires a gerund/noun (launching), because "to" here is a preposition.',
+      },
+    ],
+  },
+  {
+    id: 'articles',
+    title: 'Articles in IT Context',
+    czechTitle: 'Členy v IT angličtině',
+    description: 'Master when to use "A", "AN", "THE", or zero article when talking about databases, code classes, and computers.',
+    rules: [
+      {
+        title: 'Indefinite Articles (A / AN)',
+        explanation: 'Used for singular, countable, non-specific things mentioned for the first time. Use "AN" before vowel sounds (an object, an API, an hour).',
+        examples: [
+          { en: 'We need to hire a developer.', cs: 'Potřebujeme najmout (nějakého) vývojáře.' },
+          { en: 'I instantiated an object of the class.', cs: 'Vytvořil jsem instanci objektu té třídy.' },
+        ],
+      },
+      {
+        title: 'Definite Article (THE)',
+        explanation: 'Used when the thing is unique (the internet), specific, or has been mentioned before.',
+        examples: [
+          { en: 'The developer we hired is very skilled.', cs: 'Ten vývojář, kterého jsme najali, je velmi šikovný.' },
+          { en: 'The database is down at the moment.', cs: 'Ta databáze je momentálně mimo provoz.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'We need to write _______ API endpoint for the checkout.',
+        options: ['an', 'a', 'the', 'no article'],
+        correctAnswer: 'an',
+        explanation: '"API" starts with a vowel sound (ay-pee-eye), so it requires the indefinite article "an".',
+      },
+      {
+        question: '_______ server we bought yesterday has 64GB of RAM.',
+        options: ['The', 'A', 'An', 'no article'],
+        correctAnswer: 'The',
+        explanation: 'This is a specific server (the one we bought yesterday), requiring the definite article "The".',
+      },
+      {
+        question: 'Can you show me how to declare _______ array in Python?',
+        options: ['an', 'a', 'the', 'no article'],
+        correctAnswer: 'an',
+        explanation: '"Array" starts with a vowel sound (uh-ray), requiring the indefinite article "an".',
+      },
+    ],
+  },
+];
 
 interface KeyboardCharacter {
   symbol: string;
@@ -80,6 +277,16 @@ export default function App() {
   const [charHasAns, setCharHasAns] = useState(false);
   const [charScore, setCharScore] = useState(0);
   const [charFinished, setCharFinished] = useState(false);
+
+  // Grammar Lab State
+  const [selectedGrammarTopicId, setSelectedGrammarTopicId] = useState<string>('perfect_past');
+  const [grammarQuizActive, setGrammarQuizActive] = useState(false);
+  const [grammarQuizIndex, setGrammarQuizIndex] = useState(0);
+  const [grammarSelectedAns, setGrammarSelectedAns] = useState<string | null>(null);
+  const [grammarHasAns, setGrammarHasAns] = useState(false);
+  const [grammarScore, setGrammarScore] = useState(0);
+  const [grammarFinished, setGrammarFinished] = useState(false);
+  const grammarExplanationRef = useRef<HTMLDivElement | null>(null);
   const [words, setWords] = useState<VocabularyWord[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -144,6 +351,17 @@ export default function App() {
       return () => clearTimeout(timer);
     }
   }, [charHasAns]);
+
+  // Auto-scroll to grammar explanation when answered
+  useEffect(() => {
+    if (grammarHasAns && grammarExplanationRef.current) {
+      const timer = setTimeout(() => {
+        grammarExplanationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 80);
+      return () => clearTimeout(timer);
+    }
+  }, [grammarHasAns]);
+
 
   // Apply dark mode class to body element
   useEffect(() => {
@@ -379,6 +597,35 @@ export default function App() {
     }
   };
 
+  // GRAMMAR QUIZ HANDLERS
+  const startGrammarQuiz = () => {
+    setGrammarQuizIndex(0);
+    setGrammarSelectedAns(null);
+    setGrammarHasAns(false);
+    setGrammarScore(0);
+    setGrammarFinished(false);
+    setGrammarQuizActive(true);
+  };
+
+  const handleGrammarAnswer = (option: string, correctAnswer: string) => {
+    if (grammarHasAns) return;
+    setGrammarSelectedAns(option);
+    setGrammarHasAns(true);
+    if (option === correctAnswer) {
+      setGrammarScore((prev) => prev + 1);
+    }
+  };
+
+  const handleNextGrammarQuestion = (totalQuestions: number) => {
+    if (grammarQuizIndex + 1 < totalQuestions) {
+      setGrammarQuizIndex((prev) => prev + 1);
+      setGrammarSelectedAns(null);
+      setGrammarHasAns(false);
+    } else {
+      setGrammarFinished(true);
+    }
+  };
+
   // CATEGORY STYLING UTILS
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -441,6 +688,13 @@ export default function App() {
             >
               <Flame className="w-4 h-4" />
               <span className="hidden sm:inline">Study Arena</span>
+            </button>
+            <button 
+              onClick={() => { setActiveTab('grammar'); setGrammarQuizActive(false); }}
+              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'grammar' ? 'bg-purple-accent text-white shadow-sm' : 'text-text-muted-app hover:text-text-app'}`}
+            >
+              <BrainCircuit className="w-4 h-4" />
+              <span className="hidden sm:inline">Grammar</span>
             </button>
             <button 
               onClick={() => { setActiveTab('stats'); refreshStats(); }}
@@ -1404,6 +1658,216 @@ export default function App() {
                   </div>
                 )}
 
+              </section>
+            )}
+
+            {activeTab === 'grammar' && (
+              <section className="animate-slide-up space-y-6">
+                <div className="text-center md:text-left">
+                  <h2 className="text-3xl font-extrabold text-text-app tracking-tight">Grammar Lab</h2>
+                  <p className="text-text-muted-app text-sm mt-1">Review vital English grammar constructs formatted with coding-focused examples.</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-start">
+                  
+                  {/* Left Sidebar Menu */}
+                  <div className="flex flex-col gap-2 bg-bg-pill p-2 rounded-2xl border border-border-pill shadow-sm md:col-span-1">
+                    <span className="text-[10px] text-text-muted-app font-bold uppercase tracking-wider px-3 py-1 block">Grammar Topics</span>
+                    {grammarTopics.map((topic) => (
+                      <button
+                        key={topic.id}
+                        onClick={() => {
+                          setSelectedGrammarTopicId(topic.id);
+                          setGrammarQuizActive(false);
+                        }}
+                        className={`w-full py-2.5 px-4 rounded-xl text-xs font-extrabold uppercase text-left transition-all cursor-pointer ${
+                          selectedGrammarTopicId === topic.id
+                            ? 'bg-purple-accent text-white shadow-sm'
+                            : 'text-text-muted-app hover:text-text-app hover:bg-bg-stats-sub'
+                        }`}
+                      >
+                        {topic.title}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Right Main Details View */}
+                  <div className="md:col-span-3 space-y-6">
+                    {(() => {
+                      const topic = grammarTopics.find((t) => t.id === selectedGrammarTopicId);
+                      if (!topic) return null;
+
+                      return (
+                        <>
+                          {!grammarQuizActive ? (
+                            <div className="glass-card p-6 md:p-8 rounded-3xl border border-border-app space-y-6 shadow-md animate-flip-in">
+                              <div>
+                                <span className="text-[10px] text-purple-accent font-black uppercase tracking-widest">{topic.czechTitle}</span>
+                                <h3 className="text-2xl font-extrabold text-text-app mt-0.5">{topic.title}</h3>
+                                <p className="text-sm text-text-muted-app mt-1 leading-relaxed">{topic.description}</p>
+                              </div>
+
+                              <div className="space-y-6 pt-2">
+                                {topic.rules.map((rule, index) => (
+                                  <div key={index} className="space-y-3 bg-bg-stats-sub/30 p-5 rounded-2xl border border-border-pill">
+                                    <h4 className="font-bold text-base text-text-app flex items-center gap-2">
+                                      <span className="w-1.5 h-6 bg-purple-accent rounded-full" />
+                                      <span>{rule.title}</span>
+                                    </h4>
+                                    <p className="text-xs text-text-muted-app leading-relaxed font-semibold">
+                                      {rule.explanation}
+                                    </p>
+                                    
+                                    <div className="space-y-2 pt-2">
+                                      <span className="text-[9px] text-text-muted-app font-bold uppercase tracking-wider block">Context Examples</span>
+                                      <div className="grid grid-cols-1 gap-2">
+                                        {rule.examples.map((ex, exIdx) => (
+                                          <div key={exIdx} className="bg-bg-input p-3 rounded-xl border border-border-input flex flex-col sm:flex-row justify-between sm:items-center gap-1.5 text-xs font-semibold">
+                                            <span className="text-text-app font-mono text-[11px] font-bold">"{ex.en}"</span>
+                                            <span className="text-purple-accent dark:text-purple-300 italic text-[11px] font-semibold">{ex.cs}</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className="flex justify-end pt-4 border-t border-border-pill">
+                                <button
+                                  onClick={startGrammarQuiz}
+                                  className="bg-purple-accent hover:opacity-90 text-white font-bold py-2.5 px-6 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                                >
+                                  <span>Practice Topic Quiz</span>
+                                  <ChevronRight className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="animate-flip-in">
+                              {grammarFinished ? (
+                                <div className="glass-card text-center p-10 rounded-3xl flex flex-col items-center shadow-md max-w-md mx-auto">
+                                  <div className="w-16 h-16 bg-gradient-to-tr from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-white mb-5 shadow-sm">
+                                    <Award className="w-8 h-8" />
+                                  </div>
+                                  <h3 className="text-2xl font-black text-text-app">Practice Finished!</h3>
+                                  <p className="text-text-muted-app text-sm mt-2">
+                                    Nice review! You scored <span className="text-purple-accent font-bold text-lg">{grammarScore}</span> out of <span className="text-text-app font-bold">{topic.quiz.length}</span> correct answers.
+                                  </p>
+
+                                  <div className="flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-bg-pill border border-border-pill shadow-sm">
+                                    <Flame className="w-4 h-4 text-amber-500" />
+                                    <span className="text-xs text-text-app font-bold">Accuracy: {Math.round((grammarScore / topic.quiz.length) * 100)}%</span>
+                                  </div>
+
+                                  <div className="flex gap-4 mt-6 w-full">
+                                    <button
+                                      onClick={startGrammarQuiz}
+                                      className="flex-1 bg-purple-accent hover:opacity-90 text-white font-bold text-sm py-2.5 rounded-xl transition-all shadow-md cursor-pointer"
+                                    >
+                                      Retry Quiz
+                                    </button>
+                                    <button
+                                      onClick={() => setGrammarQuizActive(false)}
+                                      className="flex-1 bg-btn-sec-bg hover:bg-btn-sec-hover text-btn-sec-text font-bold text-sm py-2.5 rounded-xl border border-border-pill transition-all cursor-pointer"
+                                    >
+                                      Review Rules
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="space-y-6">
+                                  <div className="flex justify-between items-center text-xs text-text-muted-app px-1 font-bold">
+                                    <span>Question {grammarQuizIndex + 1} of {topic.quiz.length}</span>
+                                    <span>Score: {grammarScore}</span>
+                                  </div>
+
+                                  <div className="w-full bg-bg-stats-sub h-1.5 rounded-full overflow-hidden border border-border-pill">
+                                    <div
+                                      className="bg-gradient-to-r from-purple-500 to-indigo-500 h-full transition-all duration-300"
+                                      style={{ width: `${(grammarQuizIndex / topic.quiz.length) * 100}%` }}
+                                    />
+                                  </div>
+
+                                  <div className="glass-card p-6 md:p-8 rounded-3xl border border-border-app space-y-6 shadow-md">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-[10px] tracking-widest text-text-muted-app font-black uppercase">Fill in the blank</span>
+                                      <span className="bg-bg-pill text-[10px] text-text-muted-app px-2.5 py-0.5 rounded-md font-bold border border-border-pill shadow-sm">
+                                        {topic.title}
+                                      </span>
+                                    </div>
+
+                                    <div className="text-center py-4">
+                                      <h3 className="text-2xl font-extrabold text-text-app tracking-tight mt-2 leading-relaxed font-semibold">
+                                        {topic.quiz[grammarQuizIndex].question}
+                                      </h3>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3 mt-4">
+                                      {topic.quiz[grammarQuizIndex].options.map((option, idx) => {
+                                        const isSelected = grammarSelectedAns === option;
+                                        const isCorrect = option === topic.quiz[grammarQuizIndex].correctAnswer;
+
+                                        let btnClass = "bg-bg-option border border-border-option hover:bg-hover-option text-text-app shadow-sm cursor-pointer py-4 px-6 rounded-2xl font-bold transition-all text-center text-sm";
+                                        
+                                        if (grammarHasAns) {
+                                          if (isCorrect) {
+                                            btnClass = "bg-emerald-500/10 border-emerald-500/40 text-emerald-700 dark:text-emerald-400 py-4 px-6 rounded-2xl font-bold text-center text-sm shadow-sm";
+                                          } else if (isSelected) {
+                                            btnClass = "bg-rose-500/10 border-rose-500/40 text-rose-700 dark:text-rose-400 py-4 px-6 rounded-2xl font-bold text-center text-sm shadow-sm";
+                                          } else {
+                                            btnClass += " opacity-40";
+                                          }
+                                        }
+
+                                        return (
+                                          <button
+                                            key={idx}
+                                            disabled={grammarHasAns}
+                                            onClick={() => handleGrammarAnswer(option, topic.quiz[grammarQuizIndex].correctAnswer)}
+                                            className={btnClass}
+                                          >
+                                            {option}
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+
+                                    {grammarHasAns && (
+                                      <div ref={grammarExplanationRef} className="bg-bg-stats-sub p-5 rounded-2xl border border-border-pill space-y-2 animate-flip-in text-xs leading-relaxed">
+                                        <div className="flex items-center gap-1 text-[10px] text-purple-accent font-extrabold uppercase tracking-wider">
+                                          <AlertCircle className="w-3.5 h-3.5" />
+                                          <span>Grammar Explanation</span>
+                                        </div>
+                                        <p className="text-text-app font-semibold">
+                                          Answer: <span className="font-extrabold text-emerald-600 dark:text-emerald-400 text-sm">"{topic.quiz[grammarQuizIndex].correctAnswer}"</span>
+                                        </p>
+                                        <p className="text-text-muted-app font-semibold">
+                                          {topic.quiz[grammarQuizIndex].explanation}
+                                        </p>
+
+                                        <div className="flex justify-end pt-3">
+                                          <button
+                                            onClick={() => handleNextGrammarQuestion(topic.quiz.length)}
+                                            className="bg-purple-accent hover:opacity-90 text-white font-bold py-2 px-5 rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-md cursor-pointer"
+                                          >
+                                            <span>Next Question</span>
+                                            <ChevronRight className="w-3.5 h-3.5" />
+                                          </button>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </div>
+
+                </div>
               </section>
             )}
 
