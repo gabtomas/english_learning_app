@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-border: rgba(0, 0, 0, 0.08);
+  --panel-bg: rgba(255, 255, 255, 0.85);
+  --panel-border: rgba(0, 0, 0, 0.09);
+  --text-muted: #64748b;
+  
+  --accent-purple-gradient: linear-gradient(135deg, #a855f7, #6366f1);
+  --accent-purple: #9333ea;
+  --accent-indigo: #4f46e5;
+  --btn-secondary-bg: #f1f5f9;
+  --btn-secondary-text: #475569;
+  --btn-secondary-hover: #e2e8f0;
+  --input-bg: #ffffff;
+  --input-border: rgba(0, 0, 0, 0.12);
+  --quiz-option-bg: #ffffff;
+  --quiz-option-border: rgba(0, 0, 0, 0.08);
+  --quiz-option-hover: #f1f5f9;
+  --pill-bg: #f1f5f9;
+  --pill-border: rgba(0, 0, 0, 0.06);
+  --stats-subcard-bg: rgba(0, 0, 0, 0.02);
+  
+  color-scheme: light;
+}
+
+body.dark {
+  --background: #080c14;
+  --foreground: #f8fafc;
+  --card-bg: rgba(17, 24, 39, 0.6);
+  --card-border: rgba(255, 255, 255, 0.06);
+  --panel-bg: rgba(15, 23, 42, 0.85);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --text-muted: #94a3b8;
+  
+  --accent-purple-gradient: linear-gradient(135deg, #c084fc, #818cf8);
+  --accent-purple: #c084fc;
+  --accent-indigo: #818cf8;
+  --btn-secondary-bg: #1e293b;
+  --btn-secondary-text: #cbd5e1;
+  --btn-secondary-hover: #334155;
+  --input-bg: #030712;
+  --input-border: rgba(255, 255, 255, 0.08);
+  --quiz-option-bg: #0f172a;
+  --quiz-option-border: rgba(255, 255, 255, 0.06);
+  --quiz-option-hover: #1e293b;
+  --pill-bg: #1e293b;
+  --pill-border: rgba(255, 255, 255, 0.06);
+  --stats-subcard-bg: rgba(255, 255, 255, 0.02);
+  
+  color-scheme: dark;
+}
+
+@theme {
+  --color-bg-app: var(--background);
+  --color-text-app: var(--foreground);
+  --color-card-app: var(--card-bg);
+  --color-border-app: var(--card-border);
+  --color-panel-app: var(--panel-bg);
+  --color-panel-border-app: var(--panel-border);
+  --color-text-muted-app: var(--text-muted);
+  --color-purple-accent: var(--accent-purple);
+  --color-indigo-accent: var(--accent-indigo);
+  --color-btn-sec-bg: var(--btn-secondary-bg);
+  --color-btn-sec-text: var(--btn-secondary-text);
+  --color-btn-sec-hover: var(--btn-secondary-hover);
+  --color-bg-input: var(--input-bg);
+  --color-border-input: var(--input-border);
+  --color-bg-option: var(--quiz-option-bg);
+  --color-border-option: var(--quiz-option-border);
+  --color-hover-option: var(--quiz-option-hover);
+  --color-bg-pill: var(--pill-bg);
+  --color-border-pill: var(--pill-border);
+  --color-bg-stats-sub: var(--stats-subcard-bg);
+}
+
+body {
+  margin: 0;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Glassmorphism effects */
+.glass-panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--panel-border);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--card-border);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.08);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.05);
+}
+
+body.dark ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.5);
+}
+
+/* Keyframe animations for cards and alerts */
+@keyframes flipIn {
+  from {
+    transform: rotateY(-10deg) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-flip-in {
+  animation: flipIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

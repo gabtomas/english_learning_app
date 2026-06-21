@@ -1,0 +1,7 @@
+goal
+- I want to build a personal simple webapp for learning english
+
+
+1. step
+1.1. use modern stack, typescript, modern async await, modern imports exports, modern node (Done: Configured package.json with type=module, tsconfig.json with ESNext/NodeNext, and set up tsx), use react and vite and shadcn on FE and nodejs, typescript, nestjs, sqlite3 on BE
+1.2. create /vocabulary page where will be interactive a IT vocabulary learning (from czech langauge)
