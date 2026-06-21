@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { 
   BookOpen, 
   BrainCircuit, 
-  BarChart3, 
   Search, 
   HelpCircle, 
   CheckCircle2, 
@@ -14,7 +13,6 @@ import {
   Network, 
   Code2, 
   Terminal, 
-  Layers, 
   Lock, 
   Flame, 
   Award, 
@@ -25,9 +23,9 @@ import {
   PlusCircle
 } from 'lucide-react';
 import { api } from './api';
-import type { VocabularyWord, QuizQuestion, Stats } from './api';
+import type { VocabularyWord, QuizQuestion } from './api';
 
-type Tab = 'vocabulary' | 'study' | 'stats' | 'grammar';
+type Tab = 'vocabulary' | 'study' | 'grammar';
 type StudyMode = 'flashcard' | 'quiz' | 'typing' | 'characters';
 
 interface GrammarTopic {
@@ -553,7 +551,6 @@ export default function App() {
   const [grammarFinished, setGrammarFinished] = useState(false);
   const grammarExplanationRef = useRef<HTMLDivElement | null>(null);
   const [words, setWords] = useState<VocabularyWord[]>([]);
-  const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -644,17 +641,13 @@ export default function App() {
     }
   }, [isDarkMode]);
 
-  // Load initial vocabulary list and stats
+  // Load initial vocabulary list
   const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const [wordsData, statsData] = await Promise.all([
-        api.getWords(selectedCategory, selectedDifficulty),
-        api.getStats(),
-      ]);
+      const wordsData = await api.getWords(selectedCategory, selectedDifficulty);
       setWords(wordsData);
-      setStats(statsData);
     } catch (err: any) {
       console.error(err);
       setError('Could not connect to the backend server. Make sure it is running on port 3000.');
@@ -667,15 +660,7 @@ export default function App() {
     fetchData();
   }, [selectedCategory, selectedDifficulty]);
 
-  // Handle updates to stats
-  const refreshStats = async () => {
-    try {
-      const statsData = await api.getStats();
-      setStats(statsData);
-    } catch (err) {
-      console.error('Failed to update stats:', err);
-    }
-  };
+
 
   // Import custom vocabulary from pasted text
   const handleImportVocab = async () => {
@@ -764,7 +749,6 @@ export default function App() {
 
       const updatedWords = await api.addCustomWords(wordsToImport);
       setWords(updatedWords);
-      await refreshStats();
 
       setImportStatus({
         success: true,
@@ -890,7 +874,6 @@ export default function App() {
   const handleFlashcardAnswer = async (known: boolean) => {
     const word = flashcards[currentCardIndex];
     await api.submitAnswer(word.id, known);
-    refreshStats();
 
     if (currentCardIndex + 1 < flashcards.length) {
       setIsFlipped(false);
@@ -914,7 +897,6 @@ export default function App() {
     }
 
     await api.submitAnswer(question.wordId, isCorrect);
-    refreshStats();
   };
 
   const handleNextQuizQuestion = () => {
@@ -940,7 +922,6 @@ export default function App() {
     setTypingSubmitted(true);
 
     await api.submitAnswer(word.id, isCorrect);
-    refreshStats();
   };
 
   const handleNextTypingQuestion = () => {
@@ -1074,13 +1055,7 @@ export default function App() {
               <BrainCircuit className="w-4 h-4" />
               <span className="hidden sm:inline">Grammar</span>
             </button>
-            <button 
-              onClick={() => { setActiveTab('stats'); refreshStats(); }}
-              className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'stats' ? 'bg-purple-accent text-white shadow-sm' : 'text-text-muted-app hover:text-text-app'}`}
-            >
-              <BarChart3 className="w-4 h-4" />
-              <span className="hidden sm:inline">Progress</span>
-            </button>
+
           </nav>
 
           {/* Import Vocabulary button */}
@@ -2259,144 +2234,7 @@ export default function App() {
               </section>
             )}
 
-            {/* TAB 3: STATISTICS PANEL */}
-            {activeTab === 'stats' && stats && (
-              <section className="animate-slide-up">
-                <div className="mb-8 text-center md:text-left">
-                  <h2 className="text-3xl font-extrabold text-text-app tracking-tight">Progress Center</h2>
-                  <p className="text-text-muted-app text-sm mt-1">Spaced repetition summary and box distribution for learning retention.</p>
-                </div>
 
-                {/* Scorecards */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                  <div className="glass-card p-5 rounded-2xl border border-border-app relative overflow-hidden shadow-sm">
-                    <span className="text-[10px] text-text-muted-app font-bold uppercase tracking-wider block">Total Database</span>
-                    <span className="text-4xl font-extrabold text-text-app mt-2 block tracking-tight">{stats.totalWords}</span>
-                    <span className="text-xs text-text-muted-app mt-1 block">IT vocabulary terms</span>
-                  </div>
-
-                  <div className="glass-card p-5 rounded-2xl border border-border-app relative overflow-hidden shadow-sm">
-                    <span className="text-[10px] text-text-muted-app font-bold uppercase tracking-wider block">Mastered Terms</span>
-                    <span className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2 block tracking-tight">{stats.wordsLearned}</span>
-                    <span className="text-xs text-text-muted-app mt-1 block">Words in Leitner Box 4 & 5</span>
-                  </div>
-
-                  <div className="glass-card p-5 rounded-2xl border border-border-app relative overflow-hidden shadow-sm">
-                    <span className="text-[10px] text-text-muted-app font-bold uppercase tracking-wider block">Active Reviews</span>
-                    <span className="text-4xl font-extrabold text-purple-accent mt-2 block tracking-tight">{stats.reviewProgress}</span>
-                    <span className="text-xs text-text-muted-app mt-1 block">Terms undergoing reviews</span>
-                  </div>
-
-                  <div className="glass-card p-5 rounded-2xl border border-border-app relative overflow-hidden shadow-sm">
-                    <span className="text-[10px] text-text-muted-app font-bold uppercase tracking-wider block">Accuracy Rate</span>
-                    <span className="text-4xl font-extrabold text-amber-600 dark:text-amber-500 mt-2 block tracking-tight">{stats.successRate}%</span>
-                    <span className="text-xs text-text-muted-app mt-1 block">Overall success rate</span>
-                  </div>
-                </div>
-
-                {/* Progress Breakdown Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  
-                  {/* Spaced Repetition Box Distribution */}
-                  <div className="glass-card p-6 rounded-3xl border border-border-app shadow-sm">
-                    <h3 className="text-lg font-bold text-text-app mb-6 flex items-center gap-2">
-                      <Flame className="w-5 h-5 text-amber-500" />
-                      <span>Leitner System Distribution</span>
-                    </h3>
-
-                    <div className="space-y-4">
-                      {[1, 2, 3, 4, 5].map((bNum) => {
-                        const count = stats.boxDistribution[bNum] ?? 0;
-                        const percentage = stats.totalWords > 0 ? (count / stats.totalWords) * 100 : 0;
-                        
-                        let boxLabel = "";
-                        let boxInterval = "";
-                        let colorClass = "bg-slate-500";
-
-                        switch(bNum) {
-                          case 1: boxLabel = "Box 1 - New/Unlearned"; boxInterval = "1 hr interval"; colorClass = "bg-rose-500"; break;
-                          case 2: boxLabel = "Box 2 - Familiar"; boxInterval = "24 hrs interval"; colorClass = "bg-amber-500"; break;
-                          case 3: boxLabel = "Box 3 - Memorized"; boxInterval = "3 days interval"; colorClass = "bg-cyan-500"; break;
-                          case 4: boxLabel = "Box 4 - Long-Term"; boxInterval = "7 days interval"; colorClass = "bg-teal-500"; break;
-                          case 5: boxLabel = "Box 5 - Fully Mastered"; boxInterval = "14 days interval"; colorClass = "bg-emerald-500"; break;
-                        }
-
-                        return (
-                          <div key={bNum} className="space-y-1.5">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="font-bold text-text-app">{boxLabel}</span>
-                              <span className="text-text-muted-app text-[10px] font-semibold">{boxInterval}</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className="flex-1 bg-bg-stats-sub h-2.5 rounded-full overflow-hidden border border-border-pill">
-                                <div 
-                                  className={`${colorClass} h-full rounded-full transition-all duration-500`}
-                                  style={{ width: `${percentage}%` }}
-                                />
-                              </div>
-                              <span className="text-xs font-bold text-text-app min-w-8 text-right font-mono">
-                                {count} <span className="text-[10px] text-text-muted-app font-normal">w</span>
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Category Distribution list */}
-                  <div className="glass-card p-6 rounded-3xl border border-border-app shadow-sm">
-                    <h3 className="text-lg font-bold text-text-app mb-6 flex items-center gap-2">
-                      <Layers className="w-5 h-5 text-indigo-500" />
-                      <span>Database Topics Breakdown</span>
-                    </h3>
-
-                    <div className="space-y-4">
-                      {Object.entries(stats.categoryDistribution).map(([cat, count]) => {
-                        const percentage = stats.totalWords > 0 ? (count / stats.totalWords) * 100 : 0;
-                        return (
-                          <div key={cat} className="space-y-1.5">
-                            <div className="flex justify-between items-center text-xs">
-                              <span className="font-bold text-text-app capitalize flex items-center gap-1.5">
-                                {getCategoryIcon(cat)}
-                                <span>{cat} Terminology</span>
-                              </span>
-                              <span className="text-text-muted-app font-bold">{Math.round(percentage)}%</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className="flex-1 bg-bg-stats-sub h-2 rounded-full overflow-hidden border border-border-pill">
-                                <div 
-                                  className="bg-purple-accent h-full rounded-full transition-all duration-500"
-                                  style={{ width: `${percentage}%` }}
-                                />
-                              </div>
-                              <span className="text-xs font-bold text-text-app min-w-8 text-right font-mono">
-                                {count} <span className="text-[10px] text-text-muted-app font-normal">w</span>
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* Leitner Spaced Repetition explanation card */}
-                <div className="glass-card p-6 rounded-3xl border border-border-app mt-6 flex flex-col md:flex-row items-center gap-4 bg-gradient-to-r from-purple-500/5 via-indigo-500/5 to-slate-500/5 shadow-sm">
-                  <div className="bg-purple-accent/10 p-3 rounded-2xl border border-purple-accent/20 text-purple-accent">
-                    <BrainCircuit className="w-8 h-8" />
-                  </div>
-                  <div className="text-xs leading-relaxed text-text-muted-app font-medium">
-                    <h4 className="font-bold text-text-app text-sm mb-0.5">Leitner Repetition Mechanics</h4>
-                    <p>
-                      Terms promoted to higher boxes are reviewed less frequently, while missed questions instantly return to Box 1 for immediate review. When you correctly translate a card in Box 5, the term remains fully archived as locked memory retention.
-                    </p>
-                  </div>
-                </div>
-
-              </section>
-            )}
           </>
         )}
       </main>
