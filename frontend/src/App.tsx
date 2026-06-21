@@ -21,7 +21,8 @@ import {
   AlertCircle,
   Volume2,
   Sun,
-  Moon
+  Moon,
+  PlusCircle
 } from 'lucide-react';
 import { api } from './api';
 import type { VocabularyWord, QuizQuestion, Stats } from './api';
@@ -161,22 +162,22 @@ const grammarTopics: GrammarTopic[] = [
     ],
     quiz: [
       {
-        question: 'The developer decided _______ the library.',
-        options: ['to upgrade', 'upgrading', 'upgrade', 'upgraded'],
-        correctAnswer: 'to upgrade',
-        explanation: 'The verb "decide" is always followed by the infinitive with "to" (to upgrade).',
+        question: 'You should avoid _______ large files directly to GitHub.',
+        options: ['pushing', 'to push', 'push', 'pushed'],
+        correctAnswer: 'pushing',
+        explanation: 'The verb "avoid" is followed by a gerund (-ing form).',
       },
       {
-        question: 'You must avoid _______ secret keys in your files.',
-        options: ['storing', 'to store', 'store', 'stored'],
-        correctAnswer: 'storing',
-        explanation: 'The verb "avoid" is always followed by the gerund (-ing form, storing).',
+        question: 'We managed _______ the microservice before the product launch.',
+        options: ['to debug', 'debugging', 'debug', 'for debugging'],
+        correctAnswer: 'to debug',
+        explanation: 'The verb "manage" requires an infinitive ("to + verb").',
       },
       {
-        question: 'We look forward to _______ the project next week.',
-        options: ['launching', 'to launch', 'launch', 'launched'],
-        correctAnswer: 'launching',
-        explanation: 'The phrase "look forward to" requires a gerund/noun (launching), because "to" here is a preposition.',
+        question: 'They plan _______ their cloud services next month.',
+        options: ['to migrate', 'migrating', 'migrate', 'for migrating'],
+        correctAnswer: 'to migrate',
+        explanation: '"Plan" is followed by the infinitive structure.',
       },
     ],
   },
@@ -221,6 +222,270 @@ const grammarTopics: GrammarTopic[] = [
         options: ['an', 'a', 'the', 'no article'],
         correctAnswer: 'an',
         explanation: '"Array" starts with a vowel sound (uh-ray), requiring the indefinite article "an".',
+      },
+    ],
+  },
+  {
+    id: 'future_tenses',
+    title: 'Future Tenses & Release Planning',
+    czechTitle: 'Budoucí časy a plánování releasů',
+    description: 'Master advanced future aspects (Future Continuous, Future Perfect) to manage deadlines, sprints, and release calendars.',
+    rules: [
+      {
+        title: 'Future Continuous (Průběhový budoucí čas)',
+        explanation: 'Used for actions that will be in progress at a specific time in the future. Structure: will be + -ing.',
+        examples: [
+          { en: 'This time tomorrow, we will be deploying the new build.', cs: 'Zítra touto dobou budeme nasazovat nový build.' },
+          { en: 'At 3 PM, our team will be hosting a demo.', cs: 'Ve 3 odpoledne bude náš tým pořádat demo.' },
+        ],
+      },
+      {
+        title: 'Future Perfect & Future Perfect Continuous (Předbudoucí časy)',
+        explanation: 'Future Perfect (will have + 3rd form) shows an action will be completed before a point in the future. Future Perfect Continuous (will have been + -ing) shows an ongoing action leading up to a future point.',
+        examples: [
+          { en: 'By Friday, the QA team will have certified the build.', cs: 'Do pátku QA tým certifikuje tento build.' },
+          { en: 'By next month, I will have been writing code for 5 years.', cs: 'Příští měsíc to bude 5 let, co píšu kód.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'By the end of the sprint, we _______ all critical security vulnerability fixes.',
+        options: ['will have merged', 'will merge', 'will be merging', 'merge'],
+        correctAnswer: 'will have merged',
+        explanation: 'The deadline marker "By the end of..." indicates that the action will be completed before that time, requiring the Future Perfect.',
+      },
+      {
+        question: 'Don\'t interrupt me between 10 and 11 AM; I _______ a client code audit.',
+        options: ['will be conducting', 'will conduct', 'conduct', 'will have conducted'],
+        correctAnswer: 'will be conducting',
+        explanation: 'At that specific time window in the future, the audit will be in progress, requiring the Future Continuous.',
+      },
+      {
+        question: 'By next Friday, he _______ the servers for three weeks straight.',
+        options: ['will have been monitoring', 'will monitor', 'will be monitoring', 'has been monitoring'],
+        correctAnswer: 'will have been monitoring',
+        explanation: '"By next Friday" combined with duration "for three weeks" requires the Future Perfect Continuous.',
+      },
+    ],
+  },
+  {
+    id: 'past_perfect',
+    title: 'Past Perfect Simple & Continuous',
+    czechTitle: 'Předminulý prostý a průběhový čas',
+    description: 'Use the Past Perfect to explain the timeline of server crashes, bug origins, and cascading database failures.',
+    rules: [
+      {
+        title: 'Past Perfect Simple (Předminulý prostý čas)',
+        explanation: 'Refers to an action that took place before another action in the past. Structure: had + 3rd form.',
+        examples: [
+          { en: 'The server had already restarted when the logs loaded.', cs: 'Server se již restartoval, když se načetly logy.' },
+          { en: 'They had modified the config file before running build.', cs: 'Upravili konfigurační soubor před spuštěním buildu.' },
+        ],
+      },
+      {
+        title: 'Past Perfect Continuous (Předminulý průběhový čas)',
+        explanation: 'Describes an action that was ongoing in the past until another past event occurred. Structure: had been + -ing.',
+        examples: [
+          { en: 'We had been debugging for hours when we found the typo.', cs: 'Debugovali jsme celé hodiny, když jsme našli ten překlep.' },
+          { en: 'She had been managing the legacy system until it was retired.', cs: 'Spravovala ten starý systém, dokud nebyl vyřazen.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'We realized that the attacker _______ the main router config before the crash.',
+        options: ['had altered', 'altered', 'has altered', 'was altering'],
+        correctAnswer: 'had altered',
+        explanation: 'The alteration of the config occurred prior to the realization and the crash, which calls for the Past Perfect.',
+      },
+      {
+        question: 'The compiler failed because we _______ a syntax error in the export module.',
+        options: ['had introduced', 'introduced', 'have introduced', 'were introducing'],
+        correctAnswer: 'had introduced',
+        explanation: 'The introduction of the syntax error occurred before the compiler failed, demanding the Past Perfect Simple.',
+      },
+      {
+        question: 'Our DevOps team _______ the pipeline stability issues for days when the system crashed.',
+        options: ['had been investigating', 'investigated', 'were investigating', 'have been investigating'],
+        correctAnswer: 'had been investigating',
+        explanation: 'An ongoing past action that occurred before another past event (crashed) requires the Past Perfect Continuous.',
+      },
+    ],
+  },
+  {
+    id: 'mixed_conditionals',
+    title: 'Mixed Conditionals (C1)',
+    czechTitle: 'Smíšené podmínky',
+    description: 'Link hypothetical past actions to present results (e.g. past tech choices affecting current system speed) or permanent conditions to past outcomes.',
+    rules: [
+      {
+        title: 'Type 1: Past Condition -> Present Result',
+        explanation: 'Structure: If + Past Perfect, would + verb. Discusses how a past decision would affect the present state.',
+        examples: [
+          { en: 'If they had optimized the API, our site would be fast now.', cs: 'Kdyby optimalizovali to API, náš web by byl teď rychlý.' },
+          { en: 'If we had written tests, we wouldn\'t have bugs today.', cs: 'Kdybychom napsali testy, neměli bychom dnes chyby.' },
+        ],
+      },
+      {
+        title: 'Type 2: Present State -> Past Result',
+        explanation: 'Structure: If + Past Simple, would have + 3rd form. Describes how a general present truth would have changed a past event.',
+        examples: [
+          { en: 'If I were good at database design, I would have set it up.', cs: 'Kdybych uměl navrhovat databáze, nastavil bych to sám.' },
+          { en: 'If we weren\'t short-staffed, we would have met the release.', cs: 'Kdybychom neměli málo lidí, stihli bychom ten release.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'If we _______ the microservice architecture last year, we wouldn\'t be refactoring the monolith now.',
+        options: ['had adopted', 'adopted', 'would adopt', 'would have adopted'],
+        correctAnswer: 'had adopted',
+        explanation: 'This connects a hypothetical past action (last year -> Past Perfect) with a present consequence (now -> would not be + -ing).',
+      },
+      {
+        question: 'If the project manager _______ more technical, he would have understood our concerns yesterday.',
+        options: ['were', 'had been', 'would be', 'is'],
+        correctAnswer: 'were',
+        explanation: 'This connects a general present state/quality (were) with a hypothetical past outcome (would have understood).',
+      },
+      {
+        question: 'We _______ this critical security warning today if we had updated the library last week.',
+        options: ['wouldn\'t be seeing', 'wouldn\'t see', 'hadn\'t seen', 'didn\'t see'],
+        correctAnswer: 'wouldn\'t be seeing',
+        explanation: 'An unreal past event (updated last week) affects our present state (seeing the warning today), requiring the mixed conditional pattern.',
+      },
+    ],
+  },
+  {
+    id: 'unreal_past',
+    title: 'Unreal Past & Subjunctive (C1)',
+    czechTitle: 'Nereálná minulost a konjunktiv',
+    description: 'Express strong developer policy preferences, urgent system upgrades, or technical regrets using "It is high time" and subjunctive constructs.',
+    rules: [
+      {
+        title: 'Urgent Demands (Subjunctive Mood)',
+        explanation: 'Verbs like suggest, demand, insist, recommend take the base form of the verb (subjunctive) in the "that" clause (no "-s" or modal verb).',
+        examples: [
+          { en: 'The tech lead insisted that he deploy the code today.', cs: 'Tech lead trval na tom, aby ten kód nasadil dnes.' },
+          { en: 'I suggest she write the database query first.', cs: 'Navrhuji, aby tu databázovou query napsala jako první.' },
+        ],
+      },
+      {
+        title: 'Urgent Timing & Preferences (It is high time / Would rather)',
+        explanation: 'Use the Past Simple after "It is high time..." or "I would rather you..." to express present urgency or preferences.',
+        examples: [
+          { en: 'It is high time we updated the security policies.', cs: 'Je nejvyšší čas, abychom aktualizovali bezpečnostní zásady.' },
+          { en: 'I would rather you didn\'t execute commands in production.', cs: 'Byl bych radši, kdybys nespouštěl příkazy na produkci.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'It is high time the developer _______ the obsolete dependency.',
+        options: ['removed', 'removes', 'remove', 'has removed'],
+        correctAnswer: 'removed',
+        explanation: '"It is high time..." is followed by the Past Simple to express urgent present or future action.',
+      },
+      {
+        question: 'The security auditor insisted that the server port _______ changed immediately.',
+        options: ['be', 'is', 'was', 'were'],
+        correctAnswer: 'be',
+        explanation: 'Verbs of insistence trigger the Subjunctive mood, requiring the base verb form "be".',
+      },
+      {
+        question: 'I would rather you _______ push code directly to the main branch.',
+        options: ['didn\'t', 'don\'t', 'wouldn\'t', 'hadn\'t'],
+        correctAnswer: 'didn\'t',
+        explanation: '"I would rather you..." requires the Past Simple to show a present/future preference.',
+      },
+    ],
+  },
+  {
+    id: 'inversion',
+    title: 'Inversion & Emphasis (C1)',
+    czechTitle: 'Inverze (Obrácený slovosled)',
+    description: 'Structure sentences with inversion (auxiliary before subject) to sound highly formal, emphasizing security post-mortems or system benchmarks.',
+    rules: [
+      {
+        title: 'Negative / Restrictive Adverbials (Seldom, Rarely, Never)',
+        explanation: 'When starting a sentence with words like Seldom, Rarely, or Never, use a question word order.',
+        examples: [
+          { en: 'Seldom have we witnessed such a clean codebase.', cs: 'Zřídkakdy jsme zažili tak čistou codebase.' },
+          { en: 'Never before had the infrastructure handled this load.', cs: 'Nikdy předtím infrastruktura nezvládla takovou zátěž.' },
+        ],
+      },
+      {
+        title: 'Immediate Successions (No sooner / Hardly)',
+        explanation: 'Structure: No sooner + had + subject + done + than + past simple. Emphasizes rapid succession.',
+        examples: [
+          { en: 'No sooner had we deployed the fix than the traffic rose.', cs: 'Sotva jsme nasadili opravu, návštěvnost stoupla.' },
+          { en: 'Hardly had they run the script when the server died.', cs: 'Sotva spustili ten skript, server spadl.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'Rarely _______ such an elegant implementation of WebSockets.',
+        options: ['have we seen', 'we have seen', 'did we saw', 'we did see'],
+        correctAnswer: 'have we seen',
+        explanation: 'Starting with the restrictive adverb "Rarely" triggers subject-auxiliary inversion (Rarely have we seen...).',
+      },
+      {
+        question: 'No sooner _______ the server migration than the database locked up.',
+        options: ['had they completed', 'they had completed', 'did they completed', 'they completed'],
+        correctAnswer: 'had they completed',
+        explanation: 'The phrase "No sooner had they [done] than [did]" is a classic C1 inversion construction.',
+      },
+      {
+        question: 'Only after the logs were audited _______ the hacker\'s IP address.',
+        options: ['did we identify', 'we identified', 'had we identified', 'we did identify'],
+        correctAnswer: 'did we identify',
+        explanation: '"Only after..." at the start of a sentence requires inversion in the main clause.',
+      },
+    ],
+  },
+  {
+    id: 'advanced_passive',
+    title: 'Advanced Passive Structures (C1)',
+    czechTitle: 'Pokročilý trpný rod',
+    description: 'Utilize impersonal passives (it is believed) and passive infinitives/gerunds to write formal tech docs or security reports.',
+    rules: [
+      {
+        title: 'Impersonal Passives (It is said to have been...)',
+        explanation: 'Used to attribute general opinions or reports about past states or actions in a highly formal tone.',
+        examples: [
+          { en: 'The core module is believed to have been compromised.', cs: 'Má se za to, že jádro systému bylo kompromitováno.' },
+          { en: 'The vulnerability was reported to have existed since v1.0.', cs: 'Ohlásilo se, že zranitelnost existovala již od verze 1.0.' },
+        ],
+      },
+      {
+        title: 'Passive Gerunds & Infinitives',
+        explanation: 'Structure: being + 3rd form (gerund) or to be + 3rd form (infinitive). Used when the action happens to the subject.',
+        examples: [
+          { en: 'Our code demands to be reviewed before publication.', cs: 'Náš kód vyžaduje revizi (vyžaduje být zkontrolován) před vydáním.' },
+          { en: 'Nobody in security likes being interrupted by alert storms.', cs: 'Nikdo z bezpečnosti nemá rád, když je přerušován bouří alarmů.' },
+        ],
+      },
+    ],
+    quiz: [
+      {
+        question: 'The root cause of the memory leak is reported _______ by the garbage collector thread.',
+        options: ['to have been triggered', 'to be triggering', 'to trigger', 'having been triggered'],
+        correctAnswer: 'to have been triggered',
+        explanation: 'To report a past action using passive voice, use the perfect passive infinitive ("is reported to have been triggered").',
+      },
+      {
+        question: 'The client-side scripts object to _______ by third-party extensions.',
+        options: ['being intercepted', 'be intercepted', 'intercepting', 'to be intercepted'],
+        correctAnswer: 'being intercepted',
+        explanation: 'The verb phrase "object to" requires a gerund. In the passive voice, it is "being + past participle" (being intercepted).',
+      },
+      {
+        question: 'We need to verify that these environmental parameters cannot _______ during execution.',
+        options: ['be modified', 'being modified', 'to be modified', 'be modify'],
+        correctAnswer: 'be modified',
+        explanation: 'After the modal "cannot", we require a passive infinitive without "to" ("cannot be modified").',
       },
     ],
   },
@@ -294,6 +559,13 @@ export default function App() {
 
   // Theme control: Default to light theme (false)
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Import Vocabulary Modal State
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [pastedVocab, setPastedVocab] = useState('');
+  const [importCategory, setImportCategory] = useState('custom');
+  const [importDifficulty, setImportDifficulty] = useState('medium');
+  const [importStatus, setImportStatus] = useState<{ success: boolean; message: string } | null>(null);
 
   // Filters for vocabulary list
   const [searchQuery, setSearchQuery] = useState('');
@@ -402,6 +674,112 @@ export default function App() {
       setStats(statsData);
     } catch (err) {
       console.error('Failed to update stats:', err);
+    }
+  };
+
+  // Import custom vocabulary from pasted text
+  const handleImportVocab = async () => {
+    if (!pastedVocab.trim()) {
+      setImportStatus({ success: false, message: 'Please paste some vocabulary first.' });
+      return;
+    }
+
+    try {
+      const lines = pastedVocab.split('\n');
+      const wordsToImport: Omit<VocabularyWord, 'id' | 'progress'>[] = [];
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+
+        // Try parsing JSON first
+        if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
+          try {
+            const parsed = JSON.parse(trimmed);
+            if (parsed.english && parsed.czech) {
+              wordsToImport.push({
+                english: parsed.english.trim(),
+                czech: parsed.czech.trim(),
+                category: parsed.category || importCategory,
+                difficulty: parsed.difficulty || importDifficulty,
+                definition: parsed.definition || `Custom vocabulary: ${parsed.english}`,
+                example: parsed.example || `Example usage for ${parsed.english}`,
+              });
+              continue;
+            }
+          } catch (e) {
+            // Fallback to line parser
+          }
+        }
+
+        // Split by typical delimiters: hyphen (-), colon (:), semicolon (;), equal sign (=)
+        const parts = trimmed.split(/[-:=;]/).map(p => p.trim());
+        if (parts.length >= 2) {
+          const english = parts[0];
+          const czech = parts[1];
+          const definition = parts[2] || `Custom vocabulary: ${english}`;
+          const example = parts[3] || `Example usage for ${english}`;
+
+          wordsToImport.push({
+            english,
+            czech,
+            category: importCategory,
+            difficulty: importDifficulty,
+            definition,
+            example,
+          });
+        }
+      }
+
+      // Check if we parsed as an entire JSON array
+      if (wordsToImport.length === 0 && (pastedVocab.trim().startsWith('[') && pastedVocab.trim().endsWith(']'))) {
+        try {
+          const parsedArray = JSON.parse(pastedVocab);
+          if (Array.isArray(parsedArray)) {
+            for (const item of parsedArray) {
+              if (item.english && item.czech) {
+                wordsToImport.push({
+                  english: item.english.trim(),
+                  czech: item.czech.trim(),
+                  category: item.category || importCategory,
+                  difficulty: item.difficulty || importDifficulty,
+                  definition: item.definition || `Custom vocabulary: ${item.english}`,
+                  example: item.example || `Example usage for ${item.english}`,
+                });
+              }
+            }
+          }
+        } catch (e) {
+          // Ignore
+        }
+      }
+
+      if (wordsToImport.length === 0) {
+        setImportStatus({
+          success: false,
+          message: 'Could not recognize any words. Make sure to use: English - Czech - Definition (optional)',
+        });
+        return;
+      }
+
+      const updatedWords = await api.addCustomWords(wordsToImport);
+      setWords(updatedWords);
+      await refreshStats();
+
+      setImportStatus({
+        success: true,
+        message: `Successfully imported ${wordsToImport.length} vocabulary words!`,
+      });
+
+      setTimeout(() => {
+        setIsImportModalOpen(false);
+        setPastedVocab('');
+        setImportStatus(null);
+      }, 1500);
+
+    } catch (err: any) {
+      console.error(err);
+      setImportStatus({ success: false, message: 'Failed to import. Please check format.' });
     }
   };
 
@@ -704,6 +1082,16 @@ export default function App() {
               <span className="hidden sm:inline">Progress</span>
             </button>
           </nav>
+
+          {/* Import Vocabulary button */}
+          <button
+            onClick={() => setIsImportModalOpen(true)}
+            className="p-2.5 rounded-xl bg-bg-pill border border-border-pill text-text-muted-app hover:text-text-app transition-all flex items-center justify-center cursor-pointer shadow-sm hover:border-purple-500/30 gap-1.5"
+            title="Import Vocabulary"
+          >
+            <PlusCircle className="w-4.5 h-4.5 text-purple-accent" />
+            <span className="text-xs font-bold hidden sm:inline">Paste Vocab</span>
+          </button>
 
           {/* Theme switcher button */}
           <button
@@ -2013,7 +2401,102 @@ export default function App() {
         )}
       </main>
 
+      {/* IMPORT MODAL */}
+      {isImportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in">
+          <div className="glass-card w-full max-w-2xl rounded-3xl border border-border-app p-6 md:p-8 space-y-6 shadow-2xl relative overflow-hidden animate-flip-in">
+            {/* Header */}
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="text-2xl font-black text-text-app">Import Vocabulary</h3>
+                <p className="text-xs text-text-muted-app mt-1">Paste your custom vocabulary words to add them to your spaced repetition learning schedule.</p>
+              </div>
+              <button
+                onClick={() => { setIsImportModalOpen(false); setImportStatus(null); }}
+                className="text-text-muted-app hover:text-text-app p-1 rounded-lg transition-all"
+              >
+                <XCircle className="w-6 h-6" />
+              </button>
+            </div>
 
+            {/* Form Fields */}
+            <div className="space-y-4 text-xs font-semibold">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] text-text-muted-app font-bold uppercase tracking-wider mb-1.5">Category</label>
+                  <select
+                    value={importCategory}
+                    onChange={(e) => setImportCategory(e.target.value)}
+                    className="w-full bg-bg-input border border-border-input hover:border-purple-500/30 text-text-app rounded-xl px-4 py-2.5 outline-none transition-all"
+                  >
+                    <option value="custom">Custom Vocab</option>
+                    <option value="programming">Programming</option>
+                    <option value="database">Database</option>
+                    <option value="networking">Networking</option>
+                    <option value="security">Security</option>
+                    <option value="devops">DevOps</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] text-text-muted-app font-bold uppercase tracking-wider mb-1.5">Difficulty</label>
+                  <select
+                    value={importDifficulty}
+                    onChange={(e) => setImportDifficulty(e.target.value)}
+                    className="w-full bg-bg-input border border-border-input hover:border-purple-500/30 text-text-app rounded-xl px-4 py-2.5 outline-none transition-all"
+                  >
+                    <option value="easy">Easy</option>
+                    <option value="medium">Medium</option>
+                    <option value="hard">Hard</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] text-text-muted-app font-bold uppercase tracking-wider mb-1.5 flex justify-between">
+                  <span>Pasted Vocabulary list</span>
+                  <span className="text-[9px] lowercase italic text-purple-accent">format: English - Czech - Definition (optional)</span>
+                </label>
+                <textarea
+                  rows={8}
+                  value={pastedVocab}
+                  onChange={(e) => setPastedVocab(e.target.value)}
+                  placeholder={`Example:\ncompiler - kompilátor - Translates code into machine code\ndeprecation - zavržení - Declaring code obsolete\n\nOr JSON:\n[{"english": "middleware", "czech": "middleware", "definition": "custom definition"}]`}
+                  className="w-full font-mono bg-bg-input border border-border-input hover:border-purple-500/30 text-text-app rounded-2xl p-4 outline-none transition-all resize-none text-[11px] leading-relaxed"
+                />
+              </div>
+            </div>
+
+            {/* Status alerts */}
+            {importStatus && (
+              <div className={`p-4 rounded-2xl border text-xs font-bold leading-relaxed flex items-center gap-3 animate-flip-in ${
+                importStatus.success
+                  ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 dark:text-emerald-400'
+                  : 'bg-rose-500/10 border-rose-500/20 text-rose-700 dark:text-rose-400'
+              }`}>
+                {importStatus.success ? <CheckCircle2 className="w-5 h-5 flex-shrink-0" /> : <XCircle className="w-5 h-5 flex-shrink-0" />}
+                <span>{importStatus.message}</span>
+              </div>
+            )}
+
+            {/* Footer Buttons */}
+            <div className="flex justify-end gap-3 pt-4 border-t border-border-pill">
+              <button
+                onClick={() => { setIsImportModalOpen(false); setImportStatus(null); }}
+                className="bg-btn-sec-bg hover:bg-btn-sec-hover text-btn-sec-text font-bold text-xs py-2.5 px-5 rounded-xl border border-border-pill transition-all cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleImportVocab}
+                className="bg-purple-accent hover:opacity-90 text-white font-bold text-xs py-2.5 px-6 rounded-xl transition-all shadow-md cursor-pointer"
+              >
+                Save Vocabulary
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

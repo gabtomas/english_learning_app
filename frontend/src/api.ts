@@ -441,6 +441,7 @@ const staticWords: Omit<VocabularyWord, 'progress'>[] = [
 
 // Helper to get progress from localStorage
 const LOCAL_STORAGE_KEY = 'devlingua_spaced_progress';
+const CUSTOM_WORDS_KEY = 'devlingua_custom_words';
 
 function loadLocalStorageProgress(): Record<number, UserProgress> {
   try {
@@ -460,11 +461,32 @@ function saveLocalStorageProgress(progress: Record<number, UserProgress>) {
   }
 }
 
+export function loadCustomWords(): Omit<VocabularyWord, 'progress'>[] {
+  try {
+    const data = localStorage.getItem(CUSTOM_WORDS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (e) {
+    console.error('Failed to parse custom words:', e);
+    return [];
+  }
+}
+
+export function saveCustomWords(words: Omit<VocabularyWord, 'progress'>[]) {
+  try {
+    localStorage.setItem(CUSTOM_WORDS_KEY, JSON.stringify(words));
+  } catch (e) {
+    console.error('Failed to save custom words:', e);
+  }
+}
+
 export const api = {
   async getWords(category?: string, difficulty?: string): Promise<VocabularyWord[]> {
     const progressMap = loadLocalStorageProgress();
+    const customWords = loadCustomWords();
     
-    let filtered = staticWords.map(word => ({
+    const combined = [...staticWords, ...customWords];
+    
+    let filtered = combined.map(word => ({
       ...word,
       progress: progressMap[word.id] || null,
     }));
@@ -481,7 +503,9 @@ export const api = {
   },
 
   async getQuiz(limit = 10, category?: string, direction?: string): Promise<QuizQuestion[]> {
-    let filtered = [...staticWords];
+    const customWords = loadCustomWords();
+    const combined = [...staticWords, ...customWords];
+    let filtered = [...combined];
     
     if (category && category !== 'all') {
       filtered = filtered.filter(w => w.category === category);
@@ -577,7 +601,8 @@ export const api = {
   async getStats(): Promise<Stats> {
     const progressMap = loadLocalStorageProgress();
     const progressRecords = Object.values(progressMap);
-    const totalWords = staticWords.length;
+    const customWords = loadCustomWords();
+    const totalWords = staticWords.length + customWords.length;
 
     const wordsLearned = progressRecords.filter(p => p.box >= 4).length;
     const totalReviews = progressRecords.reduce((acc, curr) => acc + curr.correctAnswers + curr.incorrectAnswers, 0);
@@ -595,7 +620,8 @@ export const api = {
 
     // Categories distributions
     const categoryCounts: Record<string, number> = {};
-    staticWords.forEach(w => {
+    const combined = [...staticWords, ...customWords];
+    combined.forEach(w => {
       categoryCounts[w.category] = (categoryCounts[w.category] || 0) + 1;
     });
 
@@ -608,4 +634,16 @@ export const api = {
       categoryDistribution: categoryCounts,
     };
   },
+
+  async addCustomWords(newWords: Omit<VocabularyWord, 'id' | 'progress'>[]): Promise<VocabularyWord[]> {
+    const currentCustom = loadCustomWords();
+    const added: Omit<VocabularyWord, 'progress'>[] = newWords.map((w, index) => ({
+      ...w,
+      id: Date.now() + index + Math.floor(Math.random() * 1000),
+    }));
+    const updated = [...currentCustom, ...added];
+    saveCustomWords(updated);
+    
+    return this.getWords();
+  }
 };
